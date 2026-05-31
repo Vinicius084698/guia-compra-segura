@@ -1510,7 +1510,7 @@
     display: flex;
     align-items: center;
     gap: 16px;
-    z-index: 9999;
+    z-index: 100000; /* Stays above body overlay noise */
     width: 320px;
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
@@ -1564,11 +1564,35 @@
   }
   
   @media (max-width: 600px) {
+    .announce-bar {
+      font-size: 12px !important;
+      letter-spacing: 0.5px !important;
+      padding: 8px 12px !important;
+      line-height: 1.35 !important;
+    }
+    .announce-bar #countdown-timer {
+      font-size: 12px !important;
+      padding: 2px 6px !important;
+      margin-left: 4px !important;
+    }
     .toast-container {
-      bottom: 12px;
+      bottom: 16px;
       left: 12px;
       right: 12px;
       width: calc(100% - 24px);
+      padding: 12px 16px;
+      gap: 12px;
+    }
+    .toast-avatar {
+      width: 30px;
+      height: 30px;
+      font-size: 14px;
+    }
+    .toast-title {
+      font-size: 13px;
+    }
+    .toast-text {
+      font-size: 11px;
     }
   }
 </style>
@@ -2119,17 +2143,9 @@
   const socialBar = document.querySelector('.social-bar');
   if (socialBar) countObserver.observe(socialBar);
 
-  // ====== Mobile menu - hide announce bar on scroll ======
-  let announceHidden = false;
-  window.addEventListener('scroll', () => {
-    if (!announceHidden && window.scrollY > 300) {
-      const bar = document.getElementById('announce-bar');
-      bar.style.transform = 'translateY(-100%)';
-      bar.style.transition = 'transform 0.4s ease';
-      bar.style.position = 'relative';
-      announceHidden = true;
-    }
-  }, { passive: true });
+  // The announcement bar is position: relative, so it naturally scrolls out of view.
+  // We removed the window.addEventListener('scroll') that forced translateY(-100%)
+  // because it caused layout shifts and left a massive blank gap when scrolled up or on reload.
 
   // ====== INTEGRACAO DE CHECKOUT BUCKPAY ======
   const modal = document.getElementById('checkout-modal');
@@ -2512,15 +2528,15 @@
       }, 4500);
     }
 
-    // Show first toast after 8 seconds of entering the page
+    // Show first toast after 2 seconds of entering the page (immediate feedback)
     setTimeout(() => {
       showRandomToast();
       
-      // Schedule subsequent toasts every 15 to 25 seconds
+      // Schedule subsequent toasts every 7 to 12 seconds for active conversion proof
       setInterval(() => {
         showRandomToast();
-      }, Math.floor(Math.random() * 10000) + 15000);
-    }, 8000);
+      }, Math.floor(Math.random() * 5000) + 7000);
+    }, 2000);
   }
 
   // Initialize new premium conversion features on load
