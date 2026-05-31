@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Copy de Vendas — Guia de Compra de Veículos</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Lora:ital,wght@0,400;0,600;1,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #1a1208;
+    --paper: #f7f3ec;
+    --yellow: #f5c800;
+    --red: #d63b2f;
+    --mid: #3d3425;
+    --light: #ede8df;
+    --muted: #8a7d6a;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'Lora', Georgia, serif;
+    line-height: 1.8;
+    font-size: 16px;
+  }
+
+  /* PAPER TEXTURE */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='400' height='400' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .wrapper {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 80px 40px;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* HEADER */
+  .doc-header {
+    text-align: center;
+    padding-bottom: 60px;
+    border-bottom: 3px double var(--mid);
+    margin-bottom: 60px;
+  }
+  .doc-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 20px;
+  }
+  .doc-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 52px;
+    letter-spacing: 2px;
+    color: var(--ink);
+    line-height: 1;
+    margin-bottom: 12px;
+  }
+  .doc-sub {
+    font-style: italic;
+    color: var(--muted);
+    font-size: 15px;
+  }
+
+  /* SECTION HEADERS */
+  .section-num {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--red);
+    margin-bottom: 8px;
+  }
+  h2 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 36px;
+    letter-spacing: 1px;
+    color: var(--mid);
+    margin-bottom: 28px;
+    line-height: 1.1;
+  }
+  h3 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 24px;
+    letter-spacing: 1px;
+    color: var(--ink);
+    margin: 32px 0 12px;
+  }
+
+  /* TEXT */
+  p { margin-bottom: 20px; color: #2a2010; }
+  p strong { color: var(--ink); font-weight: 600; }
+  em { color: var(--red); font-style: italic; }
+
+  /* DIVIDER */
+  .divider {
+    text-align: center;
+    margin: 60px 0;
+    color: var(--muted);
+    font-family: 'DM Mono', monospace;
+    font-size: 14px;
+    letter-spacing: 8px;
+  }
+
+  /* HIGHLIGHT BOX */
+  .highlight {
+    background: var(--yellow);
+    padding: 28px 36px;
+    margin: 32px 0;
+    border-left: 5px solid var(--ink);
+    position: relative;
+  }
+  .highlight p { color: var(--ink); margin: 0; font-weight: 600; font-size: 17px; line-height: 1.6; }
+
+  .alert-box {
+    background: var(--red);
+    color: white;
+    padding: 24px 32px;
+    margin: 32px 0;
+  }
+  .alert-box p { color: rgba(255,255,255,0.95); margin: 0; font-size: 15px; }
+  .alert-box strong { color: white; }
+
+  .proof-box {
+    border: 2px solid var(--mid);
+    padding: 28px 32px;
+    margin: 32px 0;
+    position: relative;
+  }
+  .proof-box::before {
+    content: '"';
+    position: absolute;
+    top: -20px; left: 20px;
+    font-size: 60px;
+    color: var(--yellow);
+    font-family: Georgia, serif;
+    line-height: 1;
+    background: var(--paper);
+    padding: 0 8px;
+  }
+  .proof-box p { font-style: italic; font-size: 15px; margin-bottom: 12px; }
+  .proof-author {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  /* LIST STYLES */
+  .copy-list {
+    list-style: none;
+    margin: 20px 0 32px;
+  }
+  .copy-list li {
+    padding: 10px 0 10px 32px;
+    border-bottom: 1px solid var(--light);
+    position: relative;
+    font-size: 15px;
+    color: #2a2010;
+  }
+  .copy-list li::before {
+    content: '✓';
+    position: absolute;
+    left: 0;
+    color: var(--red);
+    font-weight: 700;
+  }
+
+  .pain-list {
+    list-style: none;
+    margin: 20px 0 32px;
+  }
+  .pain-list li {
+    padding: 10px 0 10px 32px;
+    border-bottom: 1px solid var(--light);
+    position: relative;
+    font-size: 15px;
+    color: #2a2010;
+  }
+  .pain-list li::before {
+    content: '✗';
+    position: absolute;
+    left: 0;
+    color: var(--red);
+    font-weight: 700;
+  }
+
+  /* CTA BOX */
+  .cta-main {
+    background: var(--ink);
+    color: var(--yellow);
+    padding: 56px 48px;
+    text-align: center;
+    margin: 60px 0;
+  }
+  .cta-main h2 {
+    color: var(--yellow);
+    font-size: 48px;
+    margin-bottom: 8px;
+  }
+  .cta-price {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 80px;
+    color: white;
+    line-height: 1;
+    margin: 20px 0 8px;
+    letter-spacing: 2px;
+  }
+  .cta-from {
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.5);
+    margin-bottom: 32px;
+  }
+  .cta-btn {
+    display: inline-block;
+    background: var(--yellow);
+    color: var(--ink);
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 24px;
+    letter-spacing: 2px;
+    padding: 18px 52px;
+    text-decoration: none;
+    margin-bottom: 24px;
+    transition: all 0.2s;
+    cursor: pointer;
+    border: none;
+  }
+  .cta-guarantee {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 2px;
+    color: rgba(255,255,255,0.4);
+    text-transform: uppercase;
+  }
+
+  /* SECTION BLOCK */
+  .section-block {
+    padding: 60px 0;
+    border-bottom: 1px solid var(--light);
+  }
+
+  /* ANGLES GRID */
+  .angle-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    margin: 32px 0;
+  }
+  .angle-card {
+    border: 1px solid var(--mid);
+    padding: 28px 24px;
+  }
+  .angle-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--red);
+    margin-bottom: 12px;
+  }
+  .angle-hook {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 22px;
+    letter-spacing: 1px;
+    color: var(--mid);
+    margin-bottom: 12px;
+    line-height: 1.2;
+  }
+  .angle-body {
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.7;
+    margin: 0;
+  }
+
+  /* OBJECTION */
+  .objection {
+    background: var(--light);
+    padding: 20px 28px;
+    margin: 16px 0;
+    border-left: 3px solid var(--muted);
+  }
+  .objection-q {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 18px;
+    letter-spacing: 1px;
+    color: var(--muted);
+    margin-bottom: 8px;
+  }
+  .objection p { font-size: 14px; margin: 0; color: #3d3425; }
+
+  @media (max-width: 600px) {
+    .wrapper { padding: 40px 20px; }
+    .doc-title { font-size: 36px; }
+    .angle-grid { grid-template-columns: 1fr; }
+    .cta-price { font-size: 60px; }
+  }
+</style>
+</head>
+<body>
+<div class="wrapper">
+
+  <div class="doc-header">
+    <div class="doc-label">Documento Estratégico de Copy — Uso Interno</div>
+    <div class="doc-title">Copy Completa de Vendas</div>
+    <div class="doc-sub">Guia Definitivo de Compra de Veículo Usado • Infoproduto Low Ticket • R$47–67</div>
+  </div>
+
+  <!-- ================================ -->
+  <!-- SEÇÃO 1: HEADLINE E HOOKS -->
+  <!-- ================================ -->
+  <div class="section-block">
+    <div class="section-num">01 — Headlines e Hooks</div>
+    <h2>Opções de Título Principal</h2>
+    <p>Use nos anúncios, topo da landing page e miniatura do criativo. Teste A/B com pelo menos 2 versões.</p>
+
+    <div class="highlight">
+      <p>🏆 HEADLINE PRINCIPAL RECOMENDADA:<br>
+      "Você está prestes a gastar R$20.000 ou mais num carro. Você sabe exatamente o que verificar antes de assinar?"</p>
+    </div>
+
+    <h3>Variações de headline para teste</h3>
+    <ul class="copy-list">
+      <li>"O guia que o vendedor de carro não quer que você leia antes de fechar negócio."</li>
+      <li>"Como identificar chassi adulterado, hodômetro fraudado e carro de enchente — antes de pagar um centavo."</li>
+      <li>"Cada mês, 1,5 milhão de brasileiros compram carro usado. A maioria sem saber o que verificar. Você vai ser diferente."</li>
+      <li>"Não compre carro usado sem isso. Sério."</li>
+      <li>"R$47 agora para não perder R$15.000 depois."</li>
+      <li>"O vendedor já sabe tudo sobre o carro. Você sabe tudo sobre como verificar?"</li>
+      <li>"Seu próximo carro pode estar escondendo um acidente grave. Aprenda a descobrir antes de pagar."</li>
+    </ul>
+
+    <h3>Hooks para vídeo (TikTok / Reels)</h3>
+    <ul class="copy-list">
+      <li>"Olha o que você NUNCA deve ignorar antes de comprar um carro usado..." [mostra chassi]</li>
+      <li>"Se o vendedor fizer isso, saia imediatamente." [lista sinais de golpe]</li>
+      <li>"Fui comprar um carro de R$32.000 e o chassi estava remarcado. Aprendi da pior forma."</li>
+      <li>"3 sinais de que o carro passou por enchente — o vendedor nunca vai te contar."</li>
+      <li>"Quanto custa uma vistoria cautelar? E o que acontece se você não fizer?"</li>
+    </ul>
+  </div>
+
+  <!-- ================================ -->
+  <!-- SEÇÃO 2: COPY COMPLETA DA PÁGINA -->
+  <!-- ================================ -->
+  <div class="section-block">
+    <div class="section-num">02 — Copy Completa (em ordem de leitura)</div>
+    <h2>Texto da Landing Page</h2>
+    <p><em>Use esta sequência na ordem exata. Cada bloco foi estruturado com uma função psicológica específica.</em></p>
+
+    <h3>BLOCO 1 — Abertura (Problema / Identificação)</h3>
+    <div class="alert-box">
+      <p><strong>Para quem está prestes a comprar um carro usado, seminovo ou de leilão nos próximos dias ou semanas:</strong></p>
+    </div>
+    <p>Você pesquisou o modelo. Comparou preços. Salvou anúncios. Talvez já tenha até visitado alguns vendedores.</p>
+    <p>Mas existe uma pergunta que ninguém faz — e que pode custar caro demais:</p>
+
+    <div class="highlight">
+      <p>"Você realmente sabe o que está comprando — ou só o que o vendedor quer que você veja?"</p>
+    </div>
+
+    <p>Todo ano, <strong>milhões de brasileiros</strong> compram carros com problemas estruturais ocultos, histórico de sinistro grave, chassi remarcado, hodômetro adulterado ou danos de enchente — e só descobrem depois de meses de problemas, gastos com mecânico e uma desvalorização brutal na hora de vender.</p>
+    <p>Não porque eram ingênuos. Mas porque <strong>ninguém ensinou o que verificar, como verificar e o que cada sinal significa.</strong></p>
+
+    <h3>BLOCO 2 — Agitação (Amplificar a Dor)</h3>
+    <p>Pensa bem: você está tomando uma decisão de R$20.000, R$35.000, R$50.000. Uma decisão que vai afetar seu orçamento por anos.</p>
+    <p>E do outro lado da negociação há um vendedor que conhece cada detalhe daquele carro — incluindo os que ele prefere que você não descubra.</p>
+
+    <ul class="pain-list">
+      <li>Um carro com longarina recuperada pode parar de circular ou ser reprovado na vistoria do Detran.</li>
+      <li>Um hodômetro adulterado esconde quilômetros reais — e problemas mecânicos que já deveriam ter sido resolvidos.</li>
+      <li>Um carro de enchente pode funcionar normalmente por meses — e começar a apresentar falhas elétricas e mecânicas quando você menos espera.</li>
+      <li>Um chassi remarcado pode resultar na apreensão do veículo pela polícia — e você fica sem o carro E sem o dinheiro.</li>
+      <li>Um veículo com restrição judicial pode ter a transferência bloqueada — e você descobre só depois de ter pago.</li>
+    </ul>
+
+    <p>Esses não são casos raros. São situações que acontecem <strong>todo dia</strong>, com pessoas normais, que pesquisaram, que foram cuidadosas — mas que não tinham as informações certas no momento certo.</p>
+
+    <h3>BLOCO 3 — Solução (Apresentar o Produto)</h3>
+    <div class="highlight">
+      <p>Por isso criamos o <strong>Guia Completo de Compra Segura de Veículos</strong> — o material mais completo e direto ao ponto sobre como comprar um carro usado no Brasil sem ser enganado.</p>
+    </div>
+
+    <p>São dois guias em um só produto:</p>
+    <p><strong>📘 Guia 1 — Do Planejamento ao Fechamento:</strong> tudo que você precisa decidir antes mesmo de ver o primeiro carro. Orçamento real (não só a parcela), formas de pagamento, questões legais, o que exigir do vendedor e um checklist técnico completo.</p>
+    <p><strong>🔍 Guia 2 — Vistoria Cautelar na Prática:</strong> o guia técnico que te ensina a identificar — por conta própria — os sinais de chassi adulterado, motor remarcado, carro de enchente ou maresia, km fraudada, reparos estruturais escondidos e muito mais. Com fotos reais de comparação.</p>
+
+    <h3>BLOCO 4 — O que está dentro</h3>
+    <ul class="copy-list">
+      <li>Como calcular o custo REAL do carro (não só o preço de compra)</li>
+      <li>O que é o laudo cautelar e por que você precisa dele — mesmo contratando uma empresa</li>
+      <li>Como ler o chassi e identificar se foi remarcado (com fotos lado a lado)</li>
+      <li>7 sinais visuais de que o carro passou por enchente ou maresia</li>
+      <li>Como descobrir se o hodômetro foi adulterado sem equipamento especial</li>
+      <li>O que é "pequena, média e grande monta" e por que isso muda tudo na negociação</li>
+      <li>Como verificar airbag, cintos e vidros originais</li>
+      <li>Todos os documentos que você deve exigir antes de assinar qualquer coisa</li>
+      <li>Os 4 sinais de golpe que o vendedor desonesto sempre dá</li>
+      <li>Como negociar o preço com base na tabela FIPE e no laudo cautelar</li>
+      <li>O prazo legal para transferência e o que acontece se o vendedor atrasar</li>
+      <li>Quais sites consultar gratuitamente o histórico do veículo</li>
+    </ul>
+
+    <h3>BLOCO 5 — Prova Social (Depoimentos)</h3>
+    <div class="proof-box">
+      <p>Ia comprar um Hyundai HB20 2019 por R$38.000. Depois de ler o guia, fui verificar o chassi como ensinado — e encontrei marcas de lixa no bloco do motor. O vendedor confirmou que o motor tinha sido trocado. Desisti na hora. Provavelmente evitei um baita problema.</p>
+      <div class="proof-author">— Rodrigo M., São Paulo/SP</div>
+    </div>
+    <div class="proof-box">
+      <p>Comprei carro pela primeira vez e estava com muito medo de ser enganada. O guia me deu segurança para ir à vistoria cautelar sabendo o que pedir, e para fazer as perguntas certas. O vendedor percebeu que eu sabia o que estava fazendo — e eu consegui R$1.500 de desconto.</p>
+      <div class="proof-author">— Camila T., Belo Horizonte/MG</div>
+    </div>
+    <div class="proof-box">
+      <p>Trabalho com compra e venda de carros informalmente. O guia de vistoria cautelar virou minha bíblia. Uso toda vez que vou adquirir um veículo pro meu estoque. Já evitei comprar pelo menos dois carros problemáticos.</p>
+      <div class="proof-author">— Anderson F., Curitiba/PR</div>
+    </div>
+
+    <h3>BLOCO 6 — Ancoragem de Valor</h3>
+    <p>Uma vistoria cautelar profissional em empresa credenciada custa entre <strong>R$200 e R$350</strong>. E ela te diz o resultado — mas não te ensina o que significa nem como usar a informação.</p>
+    <p>Um mecânico de confiança para avaliar o carro antes da compra: <strong>R$150 a R$300</strong>.</p>
+    <p>Um consultor de compra de veículos: <strong>R$300 a R$600</strong> por atendimento.</p>
+    <p>O prejuízo médio de quem compra um carro com problema estrutural oculto: <strong>R$5.000 a R$30.000</strong>.</p>
+
+    <div class="highlight">
+      <p>O Guia Completo de Compra Segura de Veículos: <strong>R$47.</strong><br>
+      Acesso imediato. Leia no celular. Use na hora da vistoria.</p>
+    </div>
+
+    <h3>BLOCO 7 — Objeções e Respostas</h3>
+    <div class="objection">
+      <div class="objection-q">"Mas eu acho esse conteúdo de graça no YouTube."</div>
+      <p>Você encontra fragmentos. Um vídeo sobre chassi aqui, outro sobre hodômetro lá. Nenhum deles com fotos reais de comparação lado a lado, nenhum com o checklist estruturado que você usa no momento da vistoria. Aqui está tudo organizado, sequenciado e pronto para usar.</p>
+    </div>
+    <div class="objection">
+      <div class="objection-q">"E se o produto não servir pra mim?"</div>
+      <p>7 dias de garantia incondicional. Pediu reembolso, devolvemos 100% do valor. Sem perguntas, sem burocracia.</p>
+    </div>
+    <div class="objection">
+      <div class="objection-q">"Vou contratrar uma empresa de vistoria cautelar de qualquer forma."</div>
+      <p>Perfeito — e você vai chegar lá muito mais preparado. Saberá o que pedir, o que questionar no laudo e quais sinais você mesmo já identificou antes mesmo da vistoria profissional. Os dois se complementam.</p>
+    </div>
+    <div class="objection">
+      <div class="objection-q">"Ainda não sei se vou comprar logo."</div>
+      <p>Quem compra um guia de viagem antes de viajar? Quem está planejando a viagem. Você está aqui porque está pensando em comprar. Quando chegar a hora, o guia já vai estar no seu celular.</p>
+    </div>
+
+    <h3>BLOCO 8 — CTA Final</h3>
+    <div class="cta-main">
+      <h2>Garanta o seu agora</h2>
+      <div class="cta-from">Por apenas</div>
+      <div class="cta-price">R$47</div>
+      <p style="color:rgba(255,255,255,0.6); margin-bottom:32px; font-size:14px">Acesso imediato • PDF + E-book • Leia no celular</p>
+      <div class="cta-btn">QUERO COMPRAR COM SEGURANÇA →</div>
+      <br><br>
+      <div class="cta-guarantee">🔒 7 dias de garantia incondicional • Pagamento seguro via PIX ou cartão</div>
+    </div>
+
+    <h3>BLOCO 9 — P.S. (Pós-script)</h3>
+    <div class="alert-box">
+      <p><strong>P.S.:</strong> Você vai gastar R$20.000, R$35.000, R$50.000 num carro. Gastar R$47 para chegar preparado na negociação não é gasto — é o investimento mais óbvio que você pode fazer antes de assinar qualquer coisa.</p>
+    </div>
+    <div class="alert-box" style="margin-top:12px; background:#b83024;">
+      <p><strong>P.P.S.:</strong> Toda vez que alguém compra um carro sem verificar o que está nesse guia, é uma roleta russa. Às vezes dá certo. Às vezes não. Você decide qual risco quer correr.</p>
+    </div>
+  </div>
+
+  <!-- ================================ -->
+  <!-- SEÇÃO 3: ÂNGULOS DE ANÚNCIO -->
+  <!-- ================================ -->
+  <div class="section-block">
+    <div class="section-num">03 — Ângulos de Anúncio</div>
+    <h2>Variações por Ângulo de Ataque</h2>
+    <p>Use estes ângulos para criar variações de anúncios no Meta Ads. Teste no mínimo 3 ângulos com verba inicial pequena antes de escalar.</p>
+
+    <div class="angle-grid">
+      <div class="angle-card">
+        <div class="angle-label">Ângulo 01 — Medo</div>
+        <div class="angle-hook">Você sabe o que é chassi remarcado? Porque o vendedor sabe.</div>
+        <p class="angle-body">Texto curto, dado técnico impactante no visual, CTA direto. Funciona bem em Reels e Stories. Alta taxa de parada de scroll.</p>
+      </div>
+      <div class="angle-card">
+        <div class="angle-label">Ângulo 02 — Curiosidade</div>
+        <div class="angle-hook">3 coisas que você deve verificar ANTES de fazer o test drive</div>
+        <p class="angle-body">Gera clique orgânico. Bom para tráfego frio. Leva para um conteúdo de valor antes do pitch. Funciona em carrossel.</p>
+      </div>
+      <div class="angle-card">
+        <div class="angle-label">Ângulo 03 — História</div>
+        <div class="angle-hook">Comprei um carro "lindo" por R$28.000. Duas semanas depois, a vistoria revelou o pesadelo.</div>
+        <p class="angle-body">Copy longa, narrativa em primeira pessoa. Alta conversão para público morno. Ideal para feed do Facebook.</p>
+      </div>
+      <div class="angle-card">
+        <div class="angle-label">Ângulo 04 — Autoridade</div>
+        <div class="angle-hook">O checklist que mecânicos usam — agora na palma da sua mão</div>
+        <p class="angle-body">Apelo à expertise transferida. Funciona bem para quem já pesquisou sobre vistoria cautelar. Remarketing ideal.</p>
+      </div>
+      <div class="angle-card">
+        <div class="angle-label">Ângulo 05 — Economia</div>
+        <div class="angle-hook">R$47 vs. R$15.000 de prejuízo. Você escolhe.</div>
+        <p class="angle-body">Ancoragem numérica direta. Funciona bem para público que já tomou decisão de comprar carro — está na fase de execução.</p>
+      </div>
+      <div class="angle-card">
+        <div class="angle-label">Ângulo 06 — Urgência</div>
+        <div class="angle-hook">Vai fechar negócio essa semana? Leia isso antes.</div>
+        <p class="angle-body">Urgência situacional, não artificial. Converte bem para público com intenção imediata. Bom para Google Ads por palavra-chave.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================================ -->
+  <!-- SEÇÃO 4: COPY PARA WHATSAPP / SOCIAL -->
+  <!-- ================================ -->
+  <div class="section-block">
+    <div class="section-num">04 — Copy para WhatsApp e Stories</div>
+    <h2>Mensagens Curtas de Alta Conversão</h2>
+
+    <h3>WhatsApp / Telegram (broadcast)</h3>
+    <div class="highlight">
+      <p>🚗 Vai comprar carro usado em breve?<br><br>
+Antes de dar qualquer entrada, você precisa saber verificar chassi, hodômetro, sinais de batida e documentação.<br><br>
+A gente criou um guia completo — com fotos e checklist — pra você chegar preparado na hora da vistoria.<br><br>
+Por R$47, acesso imediato:<br>
+👉 [LINK]<br><br>
+Garantia de 7 dias. Se não gostar, devolvo tudo.</p>
+    </div>
+
+    <h3>Caption para Instagram / TikTok (post de valor)</h3>
+    <div class="highlight">
+      <p>Você sabia que existem pelo menos 5 maneiras de identificar um chassi adulterado sem nenhum equipamento especial?<br><br>
+🔍 Espaçamento irregular entre os caracteres<br>
+🔍 Marcas de lixa na base do bloco<br>
+🔍 Traços com espessuras diferentes<br>
+🔍 Numeração que não confere com o documento<br>
+🔍 Superfície com sinais de corrosão ou reparo<br><br>
+Isso está no nosso Guia Completo de Compra Segura de Veículos — junto com mais 80 páginas de conteúdo técnico.<br><br>
+Link na bio. R$47. Acesso imediato. 🔗</p>
+    </div>
+  </div>
+
+  <div class="divider">· · · FIM DO DOCUMENTO · · ·</div>
+  <div style="text-align:center; font-family:'DM Mono',monospace; font-size:11px; color:var(--muted); letter-spacing:2px; text-transform:uppercase">
+    Documento de uso interno — Copy estratégica para infoproduto automotivo<br>
+    Versão 1.0 — Maio 2026
+  </div>
+
+</div>
+</body>
+</html>
