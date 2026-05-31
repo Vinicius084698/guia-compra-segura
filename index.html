@@ -1484,13 +1484,100 @@
     background: #27ae60 !important;
     box-shadow: 0 12px 36px rgba(46, 204, 113, 0.3) !important;
   }
+
+  /* ====== WARNING BLINK URGENCY ====== */
+  .warning-blink {
+    color: var(--yellow);
+    animation: warning-flash 1.2s infinite;
+    font-weight: 800;
+    margin-right: 4px;
+  }
+  @keyframes warning-flash {
+    0%, 100% { opacity: 1; text-shadow: 0 0 8px var(--yellow); }
+    50% { opacity: 0.4; text-shadow: none; }
+  }
+
+  /* ====== PREMIUM SOCIAL PROOF TOAST ====== */
+  .toast-container {
+    position: fixed;
+    bottom: 24px;
+    left: 24px;
+    background: rgba(21, 20, 18, 0.95);
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--yellow);
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6), 0 0 20px rgba(245, 194, 0, 0.05);
+    padding: 16px 20px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    z-index: 9999;
+    width: 320px;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    transform: translateY(150px);
+    opacity: 0;
+    transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.6s ease;
+    pointer-events: none;
+  }
+  .toast-container.active {
+    transform: translateY(0);
+    opacity: 1;
+    pointer-events: all;
+  }
+  .toast-avatar {
+    width: 36px;
+    height: 36px;
+    background: var(--yellow-glow);
+    border: 1px solid var(--yellow);
+    border-radius: 50%;
+    color: var(--yellow);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    font-weight: 900;
+    flex-shrink: 0;
+  }
+  .toast-content {
+    flex: 1;
+  }
+  .toast-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--white);
+    margin-bottom: 2px;
+  }
+  .toast-text {
+    font-size: 12px;
+    color: #a0988e;
+    line-height: 1.35;
+    text-align: left;
+  }
+  .toast-time {
+    font-size: 10px;
+    color: var(--muted);
+    align-self: flex-start;
+    margin-top: 2px;
+  }
+  
+  @media (max-width: 600px) {
+    .toast-container {
+      bottom: 12px;
+      left: 12px;
+      right: 12px;
+      width: calc(100% - 24px);
+    }
+  }
 </style>
 </head>
 <body>
 
-<!-- ANNOUNCEMENT BAR -->
+<!-- ANNOUNCEMENT BAR WITH DYNAMIC COUNTDOWN URGENCY -->
 <div class="announce-bar" id="announce-bar">
-  ⚡ ACESSO IMEDIATO APÓS O PAGAMENTO • GARANTIA INCONDICIONAL DE 7 DIAS • LEIA NO CELULAR, TABLET OU COMPUTADOR
+  <span class="warning-blink">⚠️ ALERTA:</span> Concessionárias e lojistas estão tentando derrubar este site para ocultar estas informações técnico-secretas. O preço promocional de R$47 expira em: <span id="countdown-timer" style="color: #f5c200; font-family: monospace; font-size: 16px; font-weight: 900; background: rgba(0,0,0,0.45); padding: 4px 10px; border-radius: 4px; margin-left: 6px; box-shadow: 0 0 10px var(--yellow-glow);">05:00</span>
 </div>
 
 <!-- STICKY NAV -->
@@ -2336,7 +2423,120 @@
       }, 3000);
     });
   }
+
+  // ====== 5-Minute Urgency Countdown Timer ======
+  function startUrgencyCountdown() {
+    const timerElement = document.getElementById('countdown-timer');
+    if (!timerElement) return;
+
+    let duration = 5 * 60; // 5 minutes in seconds
+    
+    // Check if there is an active session countdown in localStorage to keep it consistent on reload
+    if (localStorage.getItem('urgency_timer')) {
+      const savedTime = parseInt(localStorage.getItem('urgency_timer'), 10);
+      const elapsed = Math.floor((Date.now() - parseInt(localStorage.getItem('urgency_timer_start'), 10)) / 1000);
+      if (elapsed > 0 && elapsed < savedTime) {
+        duration = savedTime - elapsed;
+      }
+    } else {
+      localStorage.setItem('urgency_timer', duration.toString());
+      localStorage.setItem('urgency_timer_start', Date.now().toString());
+    }
+
+    const interval = setInterval(() => {
+      const minutes = Math.floor(duration / 60);
+      const seconds = duration % 60;
+
+      timerElement.textContent = `${minutes < 10 ? '0' : ''}${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+
+      if (duration <= 0) {
+        // Reset to 5 minutes to maintain persistent urgency
+        duration = 5 * 60;
+        localStorage.setItem('urgency_timer', duration.toString());
+        localStorage.setItem('urgency_timer_start', Date.now().toString());
+      } else {
+        duration--;
+        localStorage.setItem('urgency_timer', duration.toString());
+      }
+    }, 1000);
+  }
+
+  // ====== Live Purchase Toast Notifications Logic ======
+  const buyerNames = [
+    { name: 'João Silva', city: 'São Paulo, SP' },
+    { name: 'Camila Rodrigues', city: 'Belo Horizonte, MG' },
+    { name: 'Rodrigo Medeiros', city: 'Porto Alegre, RS' },
+    { name: 'Mariana Costa', city: 'Rio de Janeiro, RJ' },
+    { name: 'Anderson Fonseca', city: 'Curitiba, PR' },
+    { name: 'Carlos Eduardo', city: 'Salvador, BA' },
+    { name: 'Beatriz Santos', city: 'Recife, PE' },
+    { name: 'Marcos Oliveira', city: 'Goiânia, GO' },
+    { name: 'Patricia Lima', city: 'Florianópolis, SC' },
+    { name: 'Felipe Barbosa', city: 'Brasília, DF' },
+    { name: 'Juliana Vieira', city: 'Fortaleza, CE' },
+    { name: 'Thiago Almeida', city: 'Manaus, AM' }
+  ];
+
+  const purchaseActions = [
+    'acabou de comprar o Guia Compra Segura!',
+    'acabou de adquirir o Guia + E-book Técnico!',
+    'comprou com aprovação imediata via PIX!',
+    'garantiu os dois ebooks com desconto!',
+    'economizou R$15.000 usando o guia!',
+    'acabou de liberar o acesso em PDF!'
+  ];
+
+  function startSocialProofToasts() {
+    const toast = document.getElementById('social-proof-toast');
+    const toastTitle = document.getElementById('toast-title');
+    const toastText = document.getElementById('toast-text');
+    
+    if (!toast || !toastTitle || !toastText) return;
+
+    function showRandomToast() {
+      const buyer = buyerNames[Math.floor(Math.random() * buyerNames.length)];
+      const action = purchaseActions[Math.floor(Math.random() * purchaseActions.length)];
+      const secondsAgo = Math.floor(Math.random() * 45) + 3;
+
+      const nameParts = buyer.name.split(' ');
+      const maskedName = `${nameParts[0]} ${nameParts[1].charAt(0)}.`;
+
+      toastTitle.textContent = `${maskedName} (${buyer.city})`;
+      toastText.textContent = action;
+      toast.querySelector('.toast-time').textContent = `há ${secondsAgo}s`;
+
+      toast.classList.add('active');
+
+      setTimeout(() => {
+        toast.classList.remove('active');
+      }, 4500);
+    }
+
+    // Show first toast after 8 seconds of entering the page
+    setTimeout(() => {
+      showRandomToast();
+      
+      // Schedule subsequent toasts every 15 to 25 seconds
+      setInterval(() => {
+        showRandomToast();
+      }, Math.floor(Math.random() * 10000) + 15000);
+    }, 8000);
+  }
+
+  // Initialize new premium conversion features on load
+  startUrgencyCountdown();
+  startSocialProofToasts();
 </script>
+
+<!-- DYNAMIC FLOATING SOCIAL PROOF TOAST -->
+<div id="social-proof-toast" class="toast-container">
+  <div class="toast-avatar" id="toast-avatar">✓</div>
+  <div class="toast-content">
+    <div class="toast-title" id="toast-title">Carregando...</div>
+    <div class="toast-text" id="toast-text">Preparando notificações...</div>
+  </div>
+  <div class="toast-time">agora</div>
+</div>
 
 </body>
 </html>
