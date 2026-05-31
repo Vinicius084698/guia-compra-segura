@@ -38,8 +38,8 @@ app.use(express.json());
 // Banco de dados em memória para transações simuladas locais
 const simulatedTransactions = {};
 
-// Servir arquivos estáticos (HTML, imagens, CSS, JS) da pasta atual
-app.use(express.static(path.join(__dirname)));
+// Servir arquivos estáticos (HTML, imagens, CSS, JS) da pasta public
+app.use(express.static(path.join(__dirname, 'public')));
 
 // ROTA: Criar transação PIX
 app.post('/api/create-pix', async (req, res) => {
