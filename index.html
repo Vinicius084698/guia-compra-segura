@@ -2436,16 +2436,20 @@
 
     let duration = 5 * 60; // 5 minutes in seconds
     
-    // Check if there is an active session countdown in localStorage to keep it consistent on reload
-    if (localStorage.getItem('urgency_timer')) {
-      const savedTime = parseInt(localStorage.getItem('urgency_timer'), 10);
-      const elapsed = Math.floor((Date.now() - parseInt(localStorage.getItem('urgency_timer_start'), 10)) / 1000);
-      if (elapsed > 0 && elapsed < savedTime) {
-        duration = savedTime - elapsed;
+    // Safely check localStorage for active session countdown to prevent SecurityError in incognito modes
+    try {
+      if (window.localStorage && localStorage.getItem('urgency_timer')) {
+        const savedTime = parseInt(localStorage.getItem('urgency_timer'), 10);
+        const elapsed = Math.floor((Date.now() - parseInt(localStorage.getItem('urgency_timer_start'), 10)) / 1000);
+        if (elapsed > 0 && elapsed < savedTime) {
+          duration = savedTime - elapsed;
+        }
+      } else if (window.localStorage) {
+        localStorage.setItem('urgency_timer', duration.toString());
+        localStorage.setItem('urgency_timer_start', Date.now().toString());
       }
-    } else {
-      localStorage.setItem('urgency_timer', duration.toString());
-      localStorage.setItem('urgency_timer_start', Date.now().toString());
+    } catch (e) {
+      console.warn('LocalStorage is blocked or restricted. Falling back to memory-based countdown.', e);
     }
 
     const interval = setInterval(() => {
@@ -2457,11 +2461,19 @@
       if (duration <= 0) {
         // Reset to 5 minutes to maintain persistent urgency
         duration = 5 * 60;
-        localStorage.setItem('urgency_timer', duration.toString());
-        localStorage.setItem('urgency_timer_start', Date.now().toString());
+        try {
+          if (window.localStorage) {
+            localStorage.setItem('urgency_timer', duration.toString());
+            localStorage.setItem('urgency_timer_start', Date.now().toString());
+          }
+        } catch (e) {}
       } else {
         duration--;
-        localStorage.setItem('urgency_timer', duration.toString());
+        try {
+          if (window.localStorage) {
+            localStorage.setItem('urgency_timer', duration.toString());
+          }
+        } catch (e) {}
       }
     }, 1000);
   }
