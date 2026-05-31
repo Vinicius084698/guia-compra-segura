@@ -1970,14 +1970,6 @@
         </div>
         
         <div class="checkout-group">
-          <label class="checkout-label" for="buyer-email">E-mail para Recebimento</label>
-          <div class="checkout-input-wrapper">
-            <input type="email" id="buyer-email" class="checkout-input" placeholder="Ex: joao@email.com" required>
-            <div class="checkout-input-error" id="error-email">Digite um e-mail válido para receber o guia.</div>
-          </div>
-        </div>
-        
-        <div class="checkout-group">
           <label class="checkout-label" for="buyer-phone">WhatsApp / Celular</label>
           <div class="checkout-input-wrapper">
             <input type="tel" id="buyer-phone" class="checkout-input" placeholder="Ex: (11) 99999-9999" required>
@@ -2054,7 +2046,7 @@
         <div class="success-icon-wrapper">✓</div>
         <h2 class="success-title">Pagamento Aprovado!</h2>
         <p class="success-text">
-          Seu pagamento foi confirmado com sucesso. Os guias também foram enviados para o seu e-mail: <strong id="success-email-text"></strong>.<br><br>
+          Seu pagamento foi confirmado com sucesso.<br><br>
           Clique abaixo para baixar os seus dois guias técnicos em PDF agora mesmo!
         </p>
         
@@ -2267,9 +2259,14 @@
   // Submit checkout form
   async function submitCheckout() {
     const name = document.getElementById('buyer-name').value.trim();
-    const email = document.getElementById('buyer-email').value.trim();
     const phone = document.getElementById('buyer-phone').value.trim();
     const cpf = document.getElementById('buyer-cpf').value.trim();
+
+    // Generate a silent placeholder email to satisfy BuckPay/payment processor requirements
+    const emailParts = name.normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-zA-Z\s]/g, "").trim().split(/\s+/);
+    const firstName = emailParts[0] ? emailParts[0].toLowerCase() : 'cliente';
+    const lastName = emailParts.length > 1 ? emailParts[emailParts.length - 1].toLowerCase() : 'compra';
+    const email = `${firstName}.${lastName}${Math.floor(Math.random() * 900) + 100}@guiacomprasegura.com`;
 
     // Reset error display
     document.querySelectorAll('.checkout-input-error').forEach(err => err.style.display = 'none');
@@ -2281,13 +2278,6 @@
     if (name.split(' ').length < 2) {
       document.getElementById('error-name').style.display = 'block';
       document.getElementById('buyer-name').classList.add('invalid');
-      isValid = false;
-    }
-    
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
-      document.getElementById('error-email').style.display = 'block';
-      document.getElementById('buyer-email').classList.add('invalid');
       isValid = false;
     }
 
@@ -2408,7 +2398,6 @@
           if (timerInterval) clearInterval(timerInterval);
 
           // Success transition
-          document.getElementById('success-email-text').textContent = email;
           
           // Configure immediate guide download links (pointing to the real high-quality PDF ebooks in the guides/ directory)
           document.getElementById('download-guide1-btn').href = '/guides/Guia%20para%20a%20Compra%20do%20seu%20Primeiro%20Ve%C3%ADculo.pdf';
