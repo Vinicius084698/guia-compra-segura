@@ -233,7 +233,7 @@ app.get('/api/check-status/:external_id', async (req, res) => {
 
 // Qualquer outra rota carrega o arquivo de vendas principal
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'landing-page-guia-automovel.html'));
+  res.sendFile(path.join(__dirname, 'index.html'));
 });
 
 // Exporta o app para funcionamento em plataformas Serverless (como Vercel)
@@ -243,7 +243,7 @@ module.exports = app;
 if (require.main === module) {
   app.listen(PORT, () => {
     console.log(`\n🚀 Servidor do Guia Compra Segura rodando com sucesso!`);
-    console.log(`🔗 Acesse: http://localhost:${PORT}/landing-page-guia-automovel.html`);
+    console.log(`🔗 Acesse: http://localhost:${PORT}/index.html`);
     console.log(`🛡️  Token de API BuckPay carregado de forma 100% segura.\n`);
   });
 }
